@@ -1,7 +1,8 @@
 <template>
   <nav>
     <router-link to="/">Главная</router-link> |
-    <router-link to="/about">Обо мне</router-link>
+    <router-link to="/about">Обо мне</router-link> |
+    <router-link to="/404">Страница не найдена</router-link>
   </nav>
   <router-view />
 </template>

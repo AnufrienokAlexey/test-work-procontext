@@ -3,21 +3,24 @@
   <div class="container flex">
     <aside class="left">
       <div v-for="list in listsCount" :key="list" class="dropdown flex">
-        <label class="label-title">List {{ list }}</label>
-        <ul class="dropdown__list flex">
-          <li
-            v-for="(item, index) in this.rand(4, 10)"
-            :key="item.index"
-            class="dropdown__items flex red"
-          >
-            <label
-              ><input type="checkbox" name="type[]" />Item
-              {{ index + 1 }}</label
+        <button @click="showList">Показать</button>
+        <label class="label-title"> List {{ list }} </label>
+        <div v-if="isShow">
+          <ul class="dropdown__list flex">
+            <li
+              v-for="(item, index) in this.rand(4, 10)"
+              :key="item.index"
+              class="dropdown__items flex"
             >
-            <p>{{ item.number }}</p>
-            {{ this.rand(4, 10) }}
-          </li>
-        </ul>
+              <label
+                ><input type="checkbox" name="type[]" />Item
+                {{ index + 1 }}</label
+              >
+              <p>{{ item.number }}</p>
+              {{ this.rand(4, 10) }}
+            </li>
+          </ul>
+        </div>
       </div>
     </aside>
     <aside class="right">
@@ -35,6 +38,7 @@ export default {
   data: function () {
     return {
       listsCount: 5,
+      isShow: false,
     };
   },
   methods: {
@@ -42,6 +46,9 @@ export default {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    showList() {
+      this.isShow = true;
     },
   },
 };
@@ -61,7 +68,6 @@ aside {
 .label-title {
   white-space: nowrap;
   align-self: flex-start;
-  background-color: bisque;
 }
 .dropdown__list {
   width: 100%;
@@ -70,8 +76,5 @@ aside {
 }
 .dropdown__items {
   justify-content: space-between;
-}
-.red {
-  background-color: rgba(102, 51, 153, 0.42);
 }
 </style>

@@ -3,8 +3,14 @@
   <div class="container flex">
     <aside class="left">
       <div v-for="list in listsCount" :key="list" class="dropdown flex">
-        <button @click="showList">Показать</button>
-        <label class="label-title"> List {{ list }} </label>
+        <!--        <button @click="showList">Показать</button>-->
+        <!--        <input type="checkbox" id="checkbox" v-model="checked" />-->
+        <div class="dropdown__checkbox flex">
+          <label>
+            <input type="checkbox" value="checkbox" name="checkbox[]" />
+            List {{ list }}
+          </label>
+        </div>
         <div v-if="isShow" class="dropdown__container flex">
           <ul class="dropdown__list flex">
             <li
@@ -45,6 +51,8 @@ export default {
     return {
       listsCount: 5,
       isShow: true,
+      checked: false,
+      checkedItems: [],
     };
   },
   computed: {
@@ -100,6 +108,10 @@ aside {
 }
 .dropdown__container {
   width: 100%;
+}
+.dropdown__checkbox {
+  width: 20%;
+  flex-wrap: nowrap;
 }
 .dropdown__list {
   width: 100%;

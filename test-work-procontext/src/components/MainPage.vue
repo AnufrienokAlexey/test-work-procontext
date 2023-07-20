@@ -4,20 +4,22 @@
     <aside class="left">
       <div v-for="list in lists" :key="list.listId" class="dropdown flex">
         <div class="dropdown__checkbox flex">
-          <input type="checkbox" v-model="checked" />
-          <label> List {{ list.listId }} </label>
-        </div>
-        <div v-if="isShow" class="dropdown__container flex">
-          <ul class="dropdown__list flex">
+          <label class="label-title">
+            <input
+              type="checkbox"
+              v-model="checked"
+              :value="`${list.listId}`"
+              @change.prevent="show = !show"
+            />
+            List {{ list.listId }}
+          </label>
+          <ul v-if="show" class="dropdown__list flex">
             <li
               v-for="(item, index) in slice(items)"
               :key="item.id"
               class="dropdown__items flex"
             >
-              <label
-                ><input type="checkbox" name="type[]" />Item
-                {{ index + 1 }}</label
-              >
+              <label><input type="checkbox" />Item {{ index + 1 }}</label>
               <div class="flex">
                 <span>{{ item.id }} </span>
                 <span
@@ -44,10 +46,10 @@ import items from "../data/items";
 import lists from "../data/lists";
 export default {
   name: "MainPage",
-  data: function () {
+  data() {
     return {
       checked: [],
-      isShow: true,
+      show: false,
     };
   },
   computed: {
@@ -105,7 +107,7 @@ aside {
   width: 100%;
 }
 .dropdown__checkbox {
-  width: 20%;
+  width: 100%;
   flex-wrap: nowrap;
 }
 .dropdown__list {

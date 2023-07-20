@@ -7,7 +7,12 @@
         <!--        <input type="checkbox" id="checkbox" v-model="checked" />-->
         <div class="dropdown__checkbox flex">
           <label>
-            <input type="checkbox" value="checkbox" name="checkbox[]" />
+            <input
+              type="checkbox"
+              value="checkbox"
+              name="checkbox[]"
+              v-model="addCheckedItems"
+            />
             List {{ list }}
           </label>
         </div>
@@ -51,8 +56,13 @@ export default {
     return {
       listsCount: 5,
       isShow: true,
+      next: 0,
       checked: false,
-      checkedItems: [],
+      checkedItems: [
+        {
+          listId: 1,
+        },
+      ],
     };
   },
   computed: {
@@ -61,6 +71,11 @@ export default {
     },
   },
   methods: {
+    addCheckedItems: function () {
+      this.checkedItems.push({
+        listId: this.next++,
+      });
+    },
     rand(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);

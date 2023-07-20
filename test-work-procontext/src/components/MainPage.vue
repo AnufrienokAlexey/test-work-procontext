@@ -2,19 +2,10 @@
   <h1>Тестовая работа</h1>
   <div class="container flex">
     <aside class="left">
-      <div v-for="list in listsCount" :key="list" class="dropdown flex">
-        <!--        <button @click="showList">Показать</button>-->
-        <!--        <input type="checkbox" id="checkbox" v-model="checked" />-->
+      <div v-for="list in lists" :key="list.listId" class="dropdown flex">
         <div class="dropdown__checkbox flex">
-          <label>
-            <input
-              type="checkbox"
-              value="checkbox"
-              name="checkbox[]"
-              v-model="addCheckedItems"
-            />
-            List {{ list }}
-          </label>
+          <input type="checkbox" v-model="checked" />
+          <label> List {{ list.listId }} </label>
         </div>
         <div v-if="isShow" class="dropdown__container flex">
           <ul class="dropdown__list flex">
@@ -50,32 +41,24 @@
 
 <script>
 import items from "../data/items";
+import lists from "../data/lists";
 export default {
   name: "MainPage",
   data: function () {
     return {
-      listsCount: 5,
+      checked: [],
       isShow: true,
-      next: 0,
-      checked: false,
-      checkedItems: [
-        {
-          listId: 1,
-        },
-      ],
     };
   },
   computed: {
     items() {
       return items;
     },
+    lists() {
+      return lists;
+    },
   },
   methods: {
-    addCheckedItems: function () {
-      this.checkedItems.push({
-        listId: this.next++,
-      });
-    },
     rand(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -95,9 +78,6 @@ export default {
       arr.splice(0, randomIndex);
       // arr.sort((a, b) => a.id - b.id);
       return arr;
-    },
-    showList() {
-      this.isShow = !this.isShow;
     },
   },
 };

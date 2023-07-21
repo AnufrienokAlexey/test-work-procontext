@@ -2,39 +2,56 @@
   <h1>Тестовая работа</h1>
   <div class="container flex">
     <aside class="left">
-      <ul class="dropdown__list flex">
-        <li
-          v-for="list in lists"
-          :key="list.listId"
-          class="dropdown__items flex"
-        >
+      <div v-for="list in lists" :key="list[0]" class="dropdown flex">
+        <div class="dropdown__checkbox flex">
           <label class="label-title">
             <input
-              v-model="listArray"
-              :value="list.listId"
               type="checkbox"
-              @click="isListShow(list.listId)"
+              v-model="listChecked"
+              :value="`${list[1].listId}`"
+              @change.prevent="isShow"
             />
-            <span></span>
-            List {{ list.listId }}
+            List {{ list[1].listId }}
           </label>
-          <ul v-if="list.show" class="dropdown__list flex">
-            <li
-              v-for="item in items"
-              :key="item.id"
-              class="dropdown__items flex"
-            >
-              <label>
-                <input type="checkbox" v-model="itemsArray" :value="item.id" />
-                <span></span>
-                Item{{ item.id }}
-              </label>
-            </li>
-          </ul>
+          <div v-if="isShowListLeft()" class="dropdown__container flex column">
+            <ul v-for="l in list[2]" :key="l" class="dropdown__list flex">
+              <li class="dropdown__items flex">
+                <label class="label-title"
+                  ><input
+                    type="checkbox"
+                    v-model="itemChecked"
+                    :value="`${l[1].id}`"
+                    @change.prevent="itemAction(list, l[1].id)"
+                  />Item {{ l[1].id }}</label
+                >
+                <div class="flex">
+                  <span>{{ l[1].count }} </span>
+                  <span
+                    class="colors__value"
+                    :style="{ backgroundColor: l[1].color }"
+                  ></span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <aside class="right flex column">
+      <ul v-for="check in listChecked" :key="check.listId">
+        <li v-for="(l, index) in check" :key="index">
+          List {{ l }}
+          <div v-for="(item, index) in itemChecked" :key="index" class="flex">
+            <div v-for="(element, i) in items[index].count" :key="i">
+              <span
+                class="colors__value"
+                :style="{ backgroundColor: `${items[index].color}` }"
+              ></span>
+            </div>
+          </div>
         </li>
       </ul>
     </aside>
-    <aside class="right flex column"></aside>
   </div>
 </template>
 
@@ -43,27 +60,64 @@ import items from "../data/items";
 import lists from "../data/lists";
 export default {
   name: "MainPage",
-  data: function () {
+  data() {
     return {
-      listArray: [],
-      itemsArray: [],
+      listChecked: [],
+      itemChecked: [],
+      listArr: [],
+      show: false,
     };
   },
   computed: {
     items() {
-      return items;
+      return this.slice(items, 0, 6);
     },
     lists() {
-      return lists;
+      return this.func(items, lists);
     },
   },
   methods: {
-    isListShow(listId) {
-      this.lists.forEach((list) => {
-        if (list.listId === listId) {
-          list.show = list.show === false;
+    isShowListLeft() {
+      return this.listChecked.length > 0;
+    },
+    itemAction(list, itemId) {
+      let newArr = [];
+      list[2].forEach((el) => {
+        if (el[1].id === itemId) {
+          this.listArr.push(itemId);
         }
       });
+      return newArr;
+    },
+    isShow() {
+      this.show = !this.show;
+    },
+    func(items, lists) {
+      lists = Object.entries(lists);
+      lists.forEach((el) => {
+        el[2] = Object.entries(this.slice(items, 0, 6));
+      });
+      return lists;
+    },
+    rand(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    },
+    slice(array, min, max) {
+      let arr = array.slice();
+      arr = this.shuffle(arr);
+      let randomIndex = this.rand(min, max);
+      arr.splice(0, randomIndex);
+      // arr.sort((a, b) => a.id - b.id);
+      return arr;
     },
   },
 };
@@ -131,26 +185,5 @@ aside {
 }
 .column {
   flex-direction: column;
-}
-label input {
-  display: none;
-}
-label span {
-  height: 12px;
-  width: 12px;
-  border: 1px solid gray;
-  display: inline-block;
-  position: relative;
-  background-color: #fff;
-  border-radius: 2px;
-  padding: 3px;
-}
-[type="checkbox"]:checked + span:before {
-  content: "\2714";
-  position: absolute;
-  top: -5px;
-  left: 0;
-  font-size: 23px;
-  color: green;
 }
 </style>

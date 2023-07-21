@@ -2,21 +2,33 @@
   <h1>Тестовая работа</h1>
   <div class="container flex">
     <aside class="left">
-      <ul>
-        <li v-for="list in lists" :key="list.listId">
-          <label>
+      <ul class="dropdown__list flex">
+        <li
+          v-for="list in lists"
+          :key="list.listId"
+          class="dropdown__items flex"
+        >
+          <label class="label-title">
             <input
               v-model="listArray"
               :value="list.listId"
               type="checkbox"
               @click="isListShow(list.listId)"
             />
+            <span></span>
             List {{ list.listId }}
           </label>
-          <ul v-if="list.show">
-            <li v-for="item in items" :key="item.id">
-              <input type="checkbox" id="item" />
-              <label for="item"></label>
+          <ul v-if="list.show" class="dropdown__list flex">
+            <li
+              v-for="item in items"
+              :key="item.id"
+              class="dropdown__items flex"
+            >
+              <label>
+                <input type="checkbox" v-model="itemsArray" :value="item.id" />
+                <span></span>
+                Item{{ item.id }}
+              </label>
             </li>
           </ul>
         </li>
@@ -34,6 +46,7 @@ export default {
   data: function () {
     return {
       listArray: [],
+      itemsArray: [],
     };
   },
   computed: {
@@ -46,15 +59,9 @@ export default {
   },
   methods: {
     isListShow(listId) {
-      // this.lists[listId - 1].show = true;
       this.lists.forEach((list) => {
-        console.log(list);
         if (list.listId === listId) {
-          if (list.show === false) {
-            list.show = true;
-          } else {
-            list.show = false;
-          }
+          list.show = list.show === false;
         }
       });
     },
@@ -124,5 +131,26 @@ aside {
 }
 .column {
   flex-direction: column;
+}
+label input {
+  display: none;
+}
+label span {
+  height: 12px;
+  width: 12px;
+  border: 1px solid gray;
+  display: inline-block;
+  position: relative;
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 3px;
+}
+[type="checkbox"]:checked + span:before {
+  content: "\2714";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  font-size: 23px;
+  color: green;
 }
 </style>

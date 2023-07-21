@@ -2,40 +2,75 @@
   <h1>Тестовая работа</h1>
   <div class="container flex">
     <aside class="left">
-      <div v-for="list in lists" :key="list.listId" class="dropdown flex">
+      <div v-for="list in lists" :key="list[0]" class="dropdown flex">
         <div class="dropdown__checkbox flex">
           <label class="label-title">
             <input
               type="checkbox"
               v-model="checked"
-              :value="`${list.listId}`"
+              :value="`${list[1].listId}`"
               @change.prevent="show = !show"
             />
-            List {{ list.listId }}
+            List {{ list[1].listId }}
           </label>
-          <ul v-if="show" class="dropdown__list flex">
-            <li
-              v-for="(item, index) in slice(items)"
-              :key="item.id"
-              class="dropdown__items flex"
-            >
-              <label><input type="checkbox" />Item {{ index + 1 }}</label>
-              <div class="flex">
-                <span>{{ item.id }} </span>
-                <span
-                  class="colors__value"
-                  :style="{ backgroundColor: item.color }"
-                ></span>
-              </div>
-            </li>
-          </ul>
+          <div class="dropdown__container flex column">
+            <ul v-for="l in list[2]" :key="l" class="dropdown__list flex">
+              <li class="dropdown__items flex">
+                <label class="label-title"
+                  ><input
+                    type="checkbox"
+                    v-model="itemArr"
+                    :value="`${l[1].id}`"
+                  />Item {{ l[1].id }}</label
+                >
+                <div class="flex">
+                  <span>{{ l[1].count }} </span>
+                  <span
+                    class="colors__value"
+                    :style="{ backgroundColor: l[1].color }"
+                  ></span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!--            <ul v-if="true" class="dropdown__list flex">-->
+          <!--              <li-->
+          <!--                v-for="(item, index) in items"-->
+          <!--                :key="index"-->
+          <!--                class="dropdown__items flex"-->
+          <!--              >-->
+          <!--                <label-->
+          <!--                  ><input-->
+          <!--                    type="checkbox"-->
+          <!--                    v-model="itemArr"-->
+          <!--                    :value="`${item.id}`"-->
+          <!--                  />Item {{ index + 1 }}</label-->
+          <!--                >-->
+          <!--                <div class="flex">-->
+          <!--                  <span>{{ item.id }} </span>-->
+          <!--                  <span-->
+          <!--                    class="colors__value"-->
+          <!--                    :style="{ backgroundColor: item.color }"-->
+          <!--                  ></span>-->
+          <!--                </div>-->
+          <!--              </li>-->
+          <!--            </ul>-->
         </div>
       </div>
     </aside>
-    <aside class="right">
-      <ul>
-        <li>Item 3</li>
-        <li>Item 4</li>
+    <aside class="right flex column">
+      <ul v-for="chek in checked" :key="chek.listId">
+        <li v-for="(l, index) in chek" :key="index">
+          List {{ l }}
+          <div v-for="(item, index) in itemArr" :key="index" class="flex">
+            <div v-for="(element, i) in items[index].count" :key="i">
+              <span
+                class="colors__value"
+                :style="{ backgroundColor: `${items[index].color}` }"
+              ></span>
+            </div>
+          </div>
+        </li>
       </ul>
     </aside>
   </div>
@@ -49,18 +84,29 @@ export default {
   data() {
     return {
       checked: [],
+      itemArr: [],
+      listArr: [],
       show: false,
     };
   },
   computed: {
     items() {
-      return items;
+      return this.slice(items);
     },
     lists() {
-      return lists;
+      // console.log(this.func(lists));
+      console.log(this.func(items, lists));
+      return this.func(items, lists);
     },
   },
   methods: {
+    func(items, lists) {
+      lists = Object.entries(lists);
+      lists.forEach((el) => {
+        el[2] = Object.entries(this.slice(items));
+      });
+      return lists;
+    },
     rand(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -107,10 +153,12 @@ aside {
   width: 100%;
 }
 .dropdown__checkbox {
+  margin-bottom: 1.5em;
   width: 100%;
   flex-wrap: nowrap;
 }
 .dropdown__list {
+  margin: 0.5em;
   width: 100%;
   flex-direction: column;
   justify-content: flex-start;
@@ -139,5 +187,11 @@ aside {
   width: 26px;
   height: 26px;
   border: 1px solid transparent;
+}
+.row {
+  flex-direction: row;
+}
+.column {
+  flex-direction: column;
 }
 </style>

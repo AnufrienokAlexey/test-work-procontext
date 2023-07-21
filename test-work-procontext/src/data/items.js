@@ -27,7 +27,7 @@ export default [
   {
     id: 6,
     color: "#d22323",
-    count: 20,
+    count: 15,
   },
   {
     id: 7,

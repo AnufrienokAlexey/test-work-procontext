@@ -2,77 +2,27 @@
   <h1>Тестовая работа</h1>
   <div class="container flex">
     <aside class="left">
-      <div v-for="list in lists" :key="list[0]" class="dropdown flex">
-        <div class="dropdown__checkbox flex">
-          <label class="label-title">
+      <ul>
+        <li v-for="list in lists" :key="list.listId">
+          <label>
             <input
+              v-model="listArray"
+              :value="list.listId"
               type="checkbox"
-              v-model="checked"
-              :value="`${list[1].listId}`"
-              @change.prevent="show = !show"
+              @click="isListShow(list.listId)"
             />
-            List {{ list[1].listId }}
+            List {{ list.listId }}
           </label>
-          <div class="dropdown__container flex column">
-            <ul v-for="l in list[2]" :key="l" class="dropdown__list flex">
-              <li class="dropdown__items flex">
-                <label class="label-title"
-                  ><input
-                    type="checkbox"
-                    v-model="itemArr"
-                    :value="`${l[1].id}`"
-                  />Item {{ l[1].id }}</label
-                >
-                <div class="flex">
-                  <span>{{ l[1].count }} </span>
-                  <span
-                    class="colors__value"
-                    :style="{ backgroundColor: l[1].color }"
-                  ></span>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <!--            <ul v-if="true" class="dropdown__list flex">-->
-          <!--              <li-->
-          <!--                v-for="(item, index) in items"-->
-          <!--                :key="index"-->
-          <!--                class="dropdown__items flex"-->
-          <!--              >-->
-          <!--                <label-->
-          <!--                  ><input-->
-          <!--                    type="checkbox"-->
-          <!--                    v-model="itemArr"-->
-          <!--                    :value="`${item.id}`"-->
-          <!--                  />Item {{ index + 1 }}</label-->
-          <!--                >-->
-          <!--                <div class="flex">-->
-          <!--                  <span>{{ item.id }} </span>-->
-          <!--                  <span-->
-          <!--                    class="colors__value"-->
-          <!--                    :style="{ backgroundColor: item.color }"-->
-          <!--                  ></span>-->
-          <!--                </div>-->
-          <!--              </li>-->
-          <!--            </ul>-->
-        </div>
-      </div>
-    </aside>
-    <aside class="right flex column">
-      <ul v-for="chek in checked" :key="chek.listId">
-        <li v-for="(l, index) in chek" :key="index">
-          List {{ l }}
-          <div v-for="(item, index) in itemArr" :key="index" class="flex">
-            <div v-for="(element, i) in items[index].count" :key="i">
-              <span
-                class="colors__value"
-                :style="{ backgroundColor: `${items[index].color}` }"
-              ></span>
-            </div>
-          </div>
+          <ul v-if="list.show">
+            <li v-for="item in items" :key="item.id">
+              <input type="checkbox" id="item" />
+              <label for="item"></label>
+            </li>
+          </ul>
         </li>
       </ul>
     </aside>
+    <aside class="right flex column"></aside>
   </div>
 </template>
 
@@ -81,51 +31,32 @@ import items from "../data/items";
 import lists from "../data/lists";
 export default {
   name: "MainPage",
-  data() {
+  data: function () {
     return {
-      checked: [],
-      itemArr: [],
-      listArr: [],
-      show: false,
+      listArray: [],
     };
   },
   computed: {
     items() {
-      return this.slice(items);
+      return items;
     },
     lists() {
-      // console.log(this.func(lists));
-      console.log(this.func(items, lists));
-      return this.func(items, lists);
+      return lists;
     },
   },
   methods: {
-    func(items, lists) {
-      lists = Object.entries(lists);
-      lists.forEach((el) => {
-        el[2] = Object.entries(this.slice(items));
+    isListShow(listId) {
+      // this.lists[listId - 1].show = true;
+      this.lists.forEach((list) => {
+        console.log(list);
+        if (list.listId === listId) {
+          if (list.show === false) {
+            list.show = true;
+          } else {
+            list.show = false;
+          }
+        }
       });
-      return lists;
-    },
-    rand(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    },
-    shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    },
-    slice(array) {
-      let arr = array.slice();
-      arr = this.shuffle(arr);
-      let randomIndex = this.rand(0, 6);
-      arr.splice(0, randomIndex);
-      // arr.sort((a, b) => a.id - b.id);
-      return arr;
     },
   },
 };

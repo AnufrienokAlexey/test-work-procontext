@@ -1,22 +1,22 @@
 export default [
   {
     listId: 1,
-    checked: false,
+    show: false,
   },
   {
     listId: 2,
-    checked: false,
+    show: false,
   },
   {
     listId: 3,
-    checked: false,
+    show: false,
   },
   {
     listId: 4,
-    checked: false,
+    show: false,
   },
   {
     listId: 5,
-    checked: false,
+    show: false,
   },
 ];

@@ -9,27 +9,17 @@
           class="dropdown__items flex"
         >
           <label class="label-title">
-            <input
-              v-model="listArray"
-              :value="list.listId"
-              type="checkbox"
-              @click="isListShow(list.listId)"
-            />
-            <span></span>
+            <input :value="list.listId" type="checkbox" />
             List {{ list.listId }}
           </label>
-          <ul v-if="list.show" class="dropdown__list flex">
+          <ul v-if="true" class="dropdown__list flex">
             <li
               v-for="item in items"
               :key="item.id"
               class="dropdown__items flex"
             >
               <label>
-                <input
-                  type="checkbox"
-                  @change="addItemsArray(list.listId, item.id)"
-                />
-                <span></span>
+                <input type="checkbox" />
                 Item{{ item.id }}
               </label>
             </li>
@@ -48,8 +38,7 @@ export default {
   name: "MainPage",
   data: function () {
     return {
-      listArray: [],
-      itemsArray: [],
+      listsAndItemsArray: [],
     };
   },
   computed: {
@@ -60,18 +49,7 @@ export default {
       return lists;
     },
   },
-  methods: {
-    addItemsArray(id, value) {
-      this.itemsArray.push({ id: id, value: value });
-    },
-    isListShow(listId) {
-      this.lists.forEach((list) => {
-        if (list.listId === listId) {
-          list.show = list.show === false;
-        }
-      });
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -137,26 +115,5 @@ aside {
 }
 .column {
   flex-direction: column;
-}
-label input {
-  display: none;
-}
-label span {
-  height: 12px;
-  width: 12px;
-  border: 1px solid gray;
-  display: inline-block;
-  position: relative;
-  background-color: #fff;
-  border-radius: 2px;
-  padding: 3px;
-}
-[type="checkbox"]:checked + span:before {
-  content: "\2714";
-  position: absolute;
-  top: -5px;
-  left: 0;
-  font-size: 23px;
-  color: green;
 }
 </style>

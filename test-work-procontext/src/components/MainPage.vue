@@ -4,10 +4,11 @@
     <aside class="left">
       <ul class="dropdown__list flex">
         <li
-          v-for="(list, index) in lists"
+          v-for="(list, index) in allLists"
           :key="index"
           class="dropdown__items flex"
         >
+          {{ list }}
           <label class="label-title">
             <input :value="list.listId" type="checkbox" />
             List {{ list.listId }}
@@ -32,24 +33,15 @@
 </template>
 
 <script>
-import items from "../data/items";
-import lists from "../data/lists";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "MainPage",
-  data: function () {
-    return {
-      listsAndItemsArray: [],
-    };
+  computed: mapGetters(["allLists"]),
+  methods: mapActions(["fecthLists"]),
+  async mounted() {
+    this.fecthLists();
   },
-  computed: {
-    items() {
-      return items;
-    },
-    lists() {
-      return lists;
-    },
-  },
-  methods: {},
 };
 </script>
 
